@@ -6,20 +6,23 @@ contract ReliefStablecoin {
     string public symbol = "RSC";
     uint8 public decimals = 18;
 
-    address public admin;
+    uint256 public totalSupply;
+    address public owner;
+
     mapping(address => uint256) public balanceOf;
 
-    constructor() {
-        admin = msg.sender;
-    }
-
-    modifier onlyAdmin() {
-        require(msg.sender == admin, "Only admin");
+    modifier onlyOwner() {
+        require(msg.sender == owner, "Not owner");
         _;
     }
 
-    function mint(address to, uint256 amount) external onlyAdmin {
+    constructor() {
+        owner = msg.sender;
+    }
+
+    function mint(address to, uint256 amount) external onlyOwner {
         balanceOf[to] += amount;
+        totalSupply += amount;
     }
 
     function transfer(address to, uint256 amount) external {
